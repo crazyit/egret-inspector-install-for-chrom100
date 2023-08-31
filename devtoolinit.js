@@ -22,7 +22,11 @@ chrome.devtools.panels.elements.createSidebarPane("Egret Properties", function (
 //(function () {    var t = window.setInterval(function () { var a = egret && (window.clearInterval(t) || egret.devtool.start()); console.log("waiting") }, 100);egret && egret.devtool && (window.clearInterval(t) || egret.devtool.start());})();
 chrome.devtools.panels.create("Egret", "icon.png", "ipt/panel/index.html", function (panel) {
     var connected = false;
+    console.log("chrome--->>chrome.devtools.panels.create");
     panel.onShown.addListener(function (w) {
+    console.log("chrome--->>chrome.devtools.panels.onShown ");
+
+
         if (!connected)
             chrome.devtools.inspectedWindow.eval('(function () {    var t = window.setInterval(function () { var a = egret && egret.devtool && egret.devtool.start&& (window.clearInterval(t) || egret.devtool.start()); console.log("waiting") }, 100);egret && egret.devtool && egret.devtool.start&&(window.clearInterval(t) || egret.devtool.start());})();');
         backgroundPageConnection.postMessage({
@@ -33,6 +37,13 @@ chrome.devtools.panels.create("Egret", "icon.png", "ipt/panel/index.html", funct
         connected = true;
     });
     panel.onHidden.addListener(function (w) {
+        console.log("devtoolinit.js panel.onHidden");
+
+        if (backgroundPageConnection) {
+            backgroundPageConnection.disconnect(); // 断开旧连接
+        }
+        backgroundPageConnection = chrome.runtime.connect(); // 创建新连接
+
         backgroundPageConnection.postMessage({
             toDevTool: true,
             toggleMask: true,
