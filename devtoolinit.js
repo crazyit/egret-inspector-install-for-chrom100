@@ -39,10 +39,10 @@ chrome.devtools.panels.create("Egret", "icon.png", "ipt/panel/index.html", funct
     panel.onHidden.addListener(function (w) {
         console.log("devtoolinit.js panel.onHidden");
 
-        if (backgroundPageConnection) {
-            backgroundPageConnection.disconnect(); // 断开旧连接
-        }
-        backgroundPageConnection = chrome.runtime.connect(); // 创建新连接
+        // if (backgroundPageConnection) {
+        //     backgroundPageConnection.disconnect(); // 断开旧连接
+        // }
+        // backgroundPageConnection = chrome.runtime.connect(); // 创建新连接
 
         backgroundPageConnection.postMessage({
             toDevTool: true,

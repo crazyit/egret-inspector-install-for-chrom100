@@ -1026,6 +1026,7 @@ var egret;
                 this.fpsTag = $("#fps");
                 this.chartCtx = document.getElementById("fpsChart").getContext("2d");
                 this.on("fps", function () {
+                    console.log('监听 fps刷新');
                     e.fpsTag.text(e._fps);
                     e.drawChart()
                 })
@@ -1185,7 +1186,7 @@ var egret;
                 
                 var i = this;
                 var o = i.itemTmpl.replace("{name}", t.name).replace("{memberName}", t.memberName).replace("{icon}", t.icon);
-console.log('bindNode t', t, "o:", o);
+                // console.log('bindNode t', t, "o:", o);
 
 
                 var s = $(o);

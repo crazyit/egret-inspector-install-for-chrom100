@@ -28,7 +28,7 @@
     ],
     "web_accessible_resources": [{
         "matches": ["<all_urls>"],
-        "resources": ["injectScripts.min.js", "*/*"]
+        "resources": ["injectScripts.min.js", "injectedScript.js", "*/*"]
     }],
     "icons": {
         
