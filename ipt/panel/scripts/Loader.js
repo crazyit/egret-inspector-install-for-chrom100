@@ -1025,8 +1025,8 @@ var egret;
                 this.container = $("#profile");
                 this.fpsTag = $("#fps");
                 this.chartCtx = document.getElementById("fpsChart").getContext("2d");
+                console.log('监听 fps刷新');
                 this.on("fps", function () {
-                    console.log('监听 fps刷新');
                     e.fpsTag.text(e._fps);
                     e.drawChart()
                 })
@@ -1744,6 +1744,7 @@ var egret;
                 this.profilePanel = new e.ProfilePanel;
                 this.targetKey = null;
                 this.portReady = function () {
+                    console.log("----------->>>>>portReady");
                     var t = n.port;
                     t.post({name: "init", from: "view", targetKey: n.targetKey});
                     t.on("ready", function (e) {
@@ -1763,6 +1764,7 @@ var egret;
                         return n.showGameSelection(e.data.hash, e.data.props, e.data.treeChange)
                     });
                     t.on("fps", function (e) {
+                        console.log('更新fps数值 e.data:',e.data);
                         return n.profilePanel.fps = e.data
                     });
                     n.treePanel.mainPanel = n;
@@ -1773,6 +1775,7 @@ var egret;
                     n.profilePanel.port = t;
                     n.treePanel.init();
                     n.propsPanel.init();
+                    console.log('fps 走势图初始化');
                     n.profilePanel.init();
                     n.sendOptions()
                 };
