@@ -1767,6 +1767,10 @@ var egret;
                         console.log('更新fps数值 e.data:',e.data);
                         return n.profilePanel.fps = e.data
                     });
+                    t.on("heartbeat", function (e) {
+
+                    });
+
                     n.treePanel.mainPanel = n;
                     n.propsPanel.mainPanel = n;
                     n.profilePanel.mainPanel = n;

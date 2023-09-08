@@ -7,5 +7,5 @@
         } else {
             console.log("waiting");
         }
-    }, 100);
+    }, 10);
 })();

@@ -20,14 +20,43 @@ chrome.devtools.panels.elements.createSidebarPane("Egret Properties", function (
     chrome.devtools.panels.elements.onSelectionChanged.addListener(updateElementProperties);
 });
 //(function () {    var t = window.setInterval(function () { var a = egret && (window.clearInterval(t) || egret.devtool.start()); console.log("waiting") }, 100);egret && egret.devtool && (window.clearInterval(t) || egret.devtool.start());})();
-chrome.devtools.panels.create("Egret", "icon.png", "ipt/panel/index.html", function (panel) {
-    var connected = false;
-    console.log("chrome--->>chrome.devtools.panels.create");
+    chrome.devtools.panels.create("Egret", "icon.png", "ipt/panel/index.html", function (panel) {
+        var connected = false;
+    console.log("chrome--->>chrome.devtools.panels.create" + `Current time: ${
+        new Date().toLocaleString('en-US', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            hour12: false
+        })
+    }.${
+        new Date().getMilliseconds()
+    }`);
+
     panel.onShown.addListener(function (w) {
-    console.log("chrome--->>chrome.devtools.panels.onShown ");
-        if (!connected)
+            console.log("chrome--->>chrome.devtools.panels.onShown " + `Current time: ${
+                new Date().toLocaleString('en-US', {
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit',
+                    hour12: false
+                })
+            }.${
+                new Date().getMilliseconds()
+        }`+'connected:',connected);
+        if (!connected){
             chrome.devtools.inspectedWindow.eval('(function () {    var t = window.setInterval(function () { var a = egret && egret.devtool && egret.devtool.start&& (window.clearInterval(t) || egret.devtool.start()); console.log("waiting") }, 100);egret && egret.devtool && egret.devtool.start&&(window.clearInterval(t) || egret.devtool.start());})();');
-        backgroundPageConnection.postMessage({
+            backgroundPageConnection = chrome.runtime.connect({
+                name: btoa("for" + String(chrome.devtools.inspectedWindow.tabId))
+            });
+        }
+            backgroundPageConnection.postMessage({
             toDevTool: true,
             toggleMask: true,
             devToolHidden: false
@@ -35,7 +64,9 @@ chrome.devtools.panels.create("Egret", "icon.png", "ipt/panel/index.html", funct
         connected = true;
     });
     panel.onHidden.addListener(function (w) {
-        console.log("devtoolinit.js panel.onHidden");
+        console.log("devtoolinit.js panel.onHidden", connected);
+
+        if (!connected) return;
         // if (backgroundPageConnection) {
         //     backgroundPageConnection.disconnect(); // 断开旧连接
         // }
@@ -50,6 +81,48 @@ chrome.devtools.panels.create("Egret", "icon.png", "ipt/panel/index.html", funct
     var backgroundPageConnection = chrome.runtime.connect({
         name: btoa("for" + String(chrome.devtools.inspectedWindow.tabId))
     });
+        console.log('backgroundPageConnection create' + `Current time: ${
+
+            new Date().toLocaleString('en-US', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: false
+            })
+        }.${
+            new Date().getMilliseconds()
+        }`);
+
+        backgroundPageConnection.onDisconnect.addListener(function (disconnectedPort) {
+            connected = false;
+            console.log('backgroundPageConnection Port disconnected', chrome.runtime.lastError, `Current time: ${
+
+        new Date().toLocaleString('en-US', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            hour12: false
+        })
+    }.${
+        new Date().getMilliseconds()
+    }`);
+
+
+    if (disconnectedPort.error) {
+        console.log('Disconnect reason:', disconnectedPort.error.message);
+    } else {
+        console.log('Port disconnected without specific reason');
+    }
+    // e._reconnect(); // Handle reconnection here
+});
+
+
     backgroundPageConnection.onMessage.addListener(function (message) {
         // Handle responses from the background page, if any
     });
